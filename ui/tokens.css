@@ -1,0 +1,28 @@
+:root {
+  --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px; --space-3xl: 96px; --space-4xl: 144px;
+  --text-xs: 0.75rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.125rem; --text-xl: 1.266rem; --text-2xl: 1.424rem; --text-3xl: 1.602rem;
+  --text-display-s: 1.266rem; --text-display: 1.602rem; --text-section: 1.125rem; --text-title: 1rem; --text-lead: 1rem;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-in: cubic-bezier(0.7, 0, 0.84, 0); --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms; --dur-short: 220ms; --dur-long: 420ms;
+  --color-error: oklch(72% 0.16 27); --color-success: oklch(76% 0.12 155);
+  --container: 1680px; --gutter: 24px; --gap-columns: 16px; --section-gap-s: 120px; --section-gap: 144px; --section-gap-l: 176px;
+  --z-base: 1; --z-raised: 10; --z-dropdown: 100; --z-sticky: 200; --z-sticky-nav: 300; --z-modal: 400; --z-toast: 500; --z-tooltip: 600;
+
+  /* Deep space: near-black blue, so the hologram is the brightest thing on screen. */
+  --color-paper: oklch(13% 0.02 245); --color-paper-2: oklch(17% 0.024 240); --color-paper-3: oklch(22% 0.028 238);
+  --color-ink: oklch(95% 0.01 220); --color-ink-2: oklch(82% 0.02 225); --color-muted: oklch(66% 0.03 230);
+  --color-rule: oklch(28% 0.03 238);
+  /* Hologram cyan: the one accent. The core, the current period, the primary action, focus. */
+  --color-accent: oklch(82% 0.13 210); --color-accent-ink: oklch(18% 0.04 230); --color-focus: oklch(90% 0.1 205);
+  --color-accent-dim: oklch(58% 0.11 220); --color-accent-deep: oklch(36% 0.08 230);
+  /* A warm trace, only on one orbit of the core. */
+  --color-warm: oklch(76% 0.13 62);
+  --dur-island: 520ms; --ease-island: cubic-bezier(0.32, 1.28, 0.42, 1);
+
+  --font-display: "IBM Plex Sans KR", "Apple SD Gothic Neo", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", ui-sans-serif, system-ui, sans-serif;
+  --font-outlier: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+  --radius-card: 10px; --radius-control: 8px; --radius-pill: 999px; --rule-hair: 1px; --shadow-card: none;
+  --tracking-display: -0.01em;
+  --control-h: 40px;
+}

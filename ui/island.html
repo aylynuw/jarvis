@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JARVIS 오버레이</title>
+  <meta name="description" content="Hey Jarvis라고 부르면 화면 위에서 내려오는 JARVIS 화면.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="island.css">
+</head>
+<body data-state="booting" data-mode="compact">
+  <div class="island" id="island" role="status" aria-live="polite">
+    <section class="panel panel-c">
+      <p class="label" id="c-label">준비 중</p>
+      <p class="detail" id="c-detail"></p>
+    </section>
+
+    <section class="panel panel-f" id="panel-f">
+      <p class="label" id="f-label">Jarvis</p>
+      <p class="heard" id="heard"></p>
+      <div class="answer" id="answer"></div>
+      <div class="actions">
+        <button type="button" class="act" id="stop">멈추기</button>
+        <button type="button" class="act" id="open">대시보드</button>
+        <button type="button" class="act" id="close" aria-label="닫기">닫기</button>
+      </div>
+    </section>
+
+    <canvas class="core" id="core" aria-hidden="true"></canvas>
+  </div>
+  <noscript><p>JARVIS 노치 화면은 JavaScript가 필요해요.</p></noscript>
+  <script type="importmap">{"imports": {"three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/addons/"}}</script>
+  <script type="module" src="island.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+# Personal: never public
+.env
+data/
+.claude-workdir/
+neis-key.txt
+jarvis-mcp.json
+
+# Build and tool output
+.venv/
+__pycache__/
+*.pyc
+.hallmark/
+.DS_Store

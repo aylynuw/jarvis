@@ -1,0 +1,11 @@
+numpy
+sounddevice
+openwakeword
+onnxruntime
+faster-whisper
+mcp<2
+fastapi
+uvicorn
+python-multipart
+pywebview
+websockets

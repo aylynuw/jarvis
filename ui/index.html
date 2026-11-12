@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JARVIS</title>
+  <meta name="description" content="시간표와 급식, 할 일을 챙겨 주는 개인 비서 JARVIS의 데스크톱 화면.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body data-view="chat" data-state="booting">
+  <header class="bar">
+    <span class="wordmark">JARVIS</span>
+    <p class="status" id="status" aria-live="polite">준비 중</p>
+
+    <nav class="tabs" aria-label="화면 전환">
+      <button type="button" class="tab" data-view="chat" aria-pressed="true">대화</button>
+      <button type="button" class="tab" data-view="today" aria-pressed="false">오늘</button>
+      <button type="button" class="tab" data-view="log" aria-pressed="false">기억과 활동</button>
+    </nav>
+
+    <div class="bar-actions">
+      <button type="button" class="btn-quiet" id="stop" hidden>멈추기</button>
+      <label class="switch" id="wake-switch">
+        <input type="checkbox" id="wake" role="switch" checked>
+        <span class="switch-track" aria-hidden="true"></span>
+        <span class="switch-label">Hey Jarvis</span>
+      </label>
+      <button type="button" class="btn-quiet" id="mute" aria-pressed="false">소리 끄기</button>
+    </div>
+  </header>
+
+  <main class="console">
+    <aside class="col col-today" data-region="today" aria-label="오늘">
+      <section class="panel" aria-labelledby="h-periods">
+        <div class="panel-head">
+          <h2 id="h-periods">시간표</h2>
+          <span class="panel-meta" id="today-date"></span>
+        </div>
+        <ol class="periods" id="periods">
+          <li class="skeleton"></li><li class="skeleton"></li><li class="skeleton"></li><li class="skeleton"></li>
+        </ol>
+        <p class="note" id="periods-note" hidden></p>
+      </section>
+
+      <section class="panel" aria-labelledby="h-meals">
+        <div class="panel-head"><h2 id="h-meals">급식</h2></div>
+        <div id="meals"><p class="skeleton skeleton-line"></p><p class="skeleton skeleton-line"></p></div>
+      </section>
+
+      <section class="panel" aria-labelledby="h-reminders">
+        <div class="panel-head">
+          <h2 id="h-reminders">미리 알림</h2>
+          <button type="button" class="link-btn" id="reload-reminders">새로고침</button>
+        </div>
+        <ul class="rows" id="reminders"><li class="skeleton"></li><li class="skeleton"></li></ul>
+      </section>
+
+      <section class="panel" aria-labelledby="h-timers" id="timers-panel" hidden>
+        <div class="panel-head"><h2 id="h-timers">타이머</h2></div>
+        <ul class="rows" id="timers"></ul>
+      </section>
+    </aside>
+
+    <section class="col col-main" data-region="chat" aria-label="대화">
+      <div class="core-wrap">
+        <div class="core-stage">
+        <canvas class="core-3d" id="core-3d" aria-hidden="true"></canvas>
+        <svg class="core" id="core" viewBox="0 0 240 240" role="img" aria-labelledby="core-title">
+          <title id="core-title">JARVIS 상태</title>
+          <defs>
+            <radialGradient id="ember" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="var(--color-accent)" stop-opacity="1"/>
+              <stop offset="55%" stop-color="var(--color-accent-dim)" stop-opacity="0.55"/>
+              <stop offset="100%" stop-color="var(--color-accent-deep)" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <g class="ring-periods" id="ring-periods"></g>
+          <g class="ring-ticks" id="ring-ticks"></g>
+          <circle class="ring-inner" cx="120" cy="120" r="58"/>
+          <g class="heart">
+            <circle class="heart-glow" cx="120" cy="120" r="52" fill="url(#ember)"/>
+            <circle class="heart-core" cx="120" cy="120" r="20"/>
+          </g>
+        </svg>
+        </div>
+        <div class="core-caption">
+          <p class="core-state" id="core-state">준비 중</p>
+          <p class="core-period" id="core-period"></p>
+        </div>
+      </div>
+
+      <ol class="messages" id="messages" aria-live="polite" aria-label="대화 기록"></ol>
+
+      <div class="starters" id="starters">
+        <button type="button" class="chip-btn" data-ask="좋은 아침, 브리핑 해줘">오늘 브리핑</button>
+        <button type="button" class="chip-btn" data-ask="내일 시간표랑 급식 알려줘">내일 시간표</button>
+        <button type="button" class="chip-btn" data-ask="안 읽은 중요한 메일 있어?">중요한 메일</button>
+        <button type="button" class="chip-btn" data-ask="25분 공부 타이머 맞춰줘">공부 타이머 25분</button>
+      </div>
+
+      <form class="composer" id="composer" novalidate>
+        <ul class="attachments" id="attachments" aria-label="첨부 파일"></ul>
+        <div class="composer-row">
+          <label class="icon-btn attach" title="숙제 사진, PDF 첨부 (붙여넣기와 끌어다 놓기도 돼요)">
+            <input type="file" id="file" class="visually-hidden" accept="image/*,.pdf,.txt,.md" multiple aria-label="숙제 사진이나 파일 첨부">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20.5 11.5 12.4 19.6a5 5 0 0 1-7.1-7.1l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </label>
+          <textarea id="input" name="message" rows="1" placeholder="무엇이든 물어보세요" aria-label="메시지" aria-describedby="composer-help" autocomplete="off"></textarea>
+          <button type="button" class="icon-btn" id="mic" aria-label="지금 말하기">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+          <button type="submit" class="btn-primary" id="send">보내기</button>
+        </div>
+        <p class="helper" id="composer-help">숙제 사진은 클립 버튼, 붙여넣기, 끌어다 놓기로 올려요. Enter로 보내요.</p>
+      </form>
+    </section>
+
+    <aside class="col col-side" data-region="log" aria-label="기억과 활동">
+      <section class="panel" aria-labelledby="h-memories">
+        <div class="panel-head"><h2 id="h-memories">기억</h2><span class="panel-meta" id="memory-count"></span></div>
+        <ul class="rows" id="memories"><li class="skeleton"></li><li class="skeleton"></li></ul>
+        <form class="inline-form" id="memory-form" novalidate>
+          <label class="visually-hidden" for="memory-input">직접 기억시키기</label>
+          <input id="memory-input" name="memory" type="text" placeholder="직접 기억시키기" autocomplete="off" aria-describedby="memory-help">
+          <button type="submit" class="btn-secondary">추가</button>
+          <p class="helper" id="memory-help"></p>
+        </form>
+      </section>
+
+      <section class="panel panel-activity" aria-labelledby="h-activity">
+        <div class="panel-head"><h2 id="h-activity">활동</h2></div>
+        <ol class="activity" id="activity"></ol>
+      </section>
+    </aside>
+  </main>
+
+  <noscript><p class="noscript">JARVIS 화면은 JavaScript가 필요해요. ./run.sh로 실행해 주세요.</p></noscript>
+  <script src="app.js" defer></script>
+  <script type="importmap">{"imports": {"three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/addons/"}}</script>
+  <script type="module" src="core3d.js"></script>
+</body>
+</html>
