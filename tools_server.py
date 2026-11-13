@@ -21,12 +21,12 @@ from mcp.server.fastmcp import FastMCP
 
 import store
 
-# Your school, from .env (see .env.example). Codes: https://open.neis.go.kr 학교기본정보.
-OFFICE_CODE = os.getenv("JARVIS_NEIS_OFFICE", "")      # 시도교육청 코드, e.g. J10
-SCHOOL_CODE = os.getenv("JARVIS_NEIS_SCHOOL", "")      # 행정표준코드
+# Your school, from .env (see .env.example). Look the codes up at https://open.neis.go.kr ("학교기본정보" dataset).
+OFFICE_CODE = os.getenv("JARVIS_NEIS_OFFICE", "")      # education office code (ATPT_OFCDC_SC_CODE), e.g. J10
+SCHOOL_CODE = os.getenv("JARVIS_NEIS_SCHOOL", "")      # school code (SD_SCHUL_CODE)
 GRADE = os.getenv("JARVIS_GRADE", "1")
 CLASS = os.getenv("JARVIS_CLASS", "1")
-NO_SCHOOL = "학교가 아직 설정되지 않았어요. .env에 JARVIS_NEIS_OFFICE와 JARVIS_NEIS_SCHOOL을 넣어 주세요."
+NO_SCHOOL = "No school is set up yet. Add JARVIS_NEIS_OFFICE and JARVIS_NEIS_SCHOOL to .env."
 NEIS = "https://open.neis.go.kr/hub/"
 WEEKDAYS = "월화수목금토일"
 
@@ -34,7 +34,7 @@ mcp = FastMCP("jarvis")
 
 
 def _load_key() -> str:
-    """Free key from https://open.neis.go.kr (인증키 신청). Without it NEIS
+    """Free key from https://open.neis.go.kr ("인증키 신청", request an API key). Without it NEIS
     only returns the first 5 rows of any request (so periods 6-7 are cut off)."""
     key_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "neis-key.txt")
     if os.path.exists(key_file):
